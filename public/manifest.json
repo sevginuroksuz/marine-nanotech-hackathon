@@ -1,0 +1,10 @@
+{
+  "name": "Yachtdrop — Boat Parts Delivered to Your Berth",
+  "short_name": "Yachtdrop",
+  "description": "Order marine parts and supplies for delivery to your boat or marina pickup.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#071120",
+  "theme_color": "#071120",
+  "icons": []
+}

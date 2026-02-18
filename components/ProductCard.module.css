@@ -1,0 +1,111 @@
+.card {
+  background: rgba(13, 25, 45, 0.9);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  animation: popIn 0.35s ease both;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.card:hover { transform: translateY(-2px); border-color: rgba(34,211,238,0.2); }
+.pill {
+  position: absolute;
+  top: 8px; left: 8px;
+  z-index: 2;
+  background: rgba(7,17,32,0.78);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(34,211,238,0.2);
+  color: #67e8f9;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  padding: 3px 7px;
+}
+.imgWrap {
+  width: 100%;
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+  background: #0a1a2e;
+}
+.imgSkeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #0f2035 25%, #152b45 50%, #0f2035 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+.img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+.card:hover .img { transform: scale(1.04); }
+.imgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(7,17,32,0.65) 0%, transparent 55%);
+}
+.body {
+  padding: 10px 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--white);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.desc {
+  font-size: 0.7rem;
+  color: #64748b;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.price {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--white);
+}
+.curr {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-right: 1px;
+}
+.addBtn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.12s;
+  flex-shrink: 0;
+}
+.addBtn:hover { background: #0891b2; }
+.addActive    { background: #0d9488; }
+.addFlash     { transform: scale(0.85); }

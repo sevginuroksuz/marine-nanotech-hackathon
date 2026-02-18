@@ -1,0 +1,26 @@
+.bar {
+  position: fixed;
+  bottom: 16px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 32px); max-width: 448px;
+  background: linear-gradient(135deg, #0c2a3f 0%, #0e3347 100%);
+  border: 1px solid rgba(34,211,238,0.2);
+  border-radius: 16px;
+  padding: 10px 10px 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  z-index: 30;
+  animation: slideUp 0.25s ease;
+  gap: 10px;
+}
+.viewBtn {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.86rem; font-weight: 600; color: var(--white); flex: 1;
+}
+.checkoutBtn {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem; font-weight: 800;
+  background: linear-gradient(135deg, #0e7490, #0891b2);
+  color: #fff; border-radius: 10px; padding: 9px 16px;
+  box-shadow: 0 3px 12px rgba(8,145,178,0.35);
+  white-space: nowrap;
+}

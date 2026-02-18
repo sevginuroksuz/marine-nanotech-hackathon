@@ -1,0 +1,56 @@
+"use client";
+import { useCart } from "@/lib/store";
+import styles from "./CartDrawer.module.css";
+
+export default function CartDrawer({ onClose, onCheckout }) {
+  const { items, remove, updateQty } = useCart();
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+
+  return (
+    <>
+      <div className={styles.backdrop} onClick={onClose} aria-hidden="true" />
+      <div className={styles.drawer} role="dialog" aria-label="Shopping cart" aria-modal="true">
+        <div className={styles.handle} />
+        <div className={styles.topRow}>
+          <h2 className={styles.title}>Cart</h2>
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close cart">✕</button>
+        </div>
+        {items.length === 0 ? (
+          <div className={styles.empty}>
+            <span className={styles.emptyIcon}>⚓</span>
+            <p>Your cart is empty</p>
+          </div>
+        ) : (
+          <>
+            <ul className={styles.list}>
+              {items.map((item) => (
+                <li key={item.id} className={styles.item}>
+                  {item.imageUrl && (
+                    <img src={item.imageUrl} alt={item.name} className={styles.itemImg} />
+                  )}
+                  <div className={styles.itemInfo}>
+                    <p className={styles.itemName}>{item.name}</p>
+                    <p className={styles.itemPrice}>€{(item.price * item.qty).toFixed(2)}</p>
+                  </div>
+                  <div className={styles.qtyRow}>
+                    <button onClick={() => updateQty(item.id, item.qty - 1)} aria-label="Decrease" className={styles.qtyBtn}>−</button>
+                    <span className={styles.qty}>{item.qty}</span>
+                    <button onClick={() => updateQty(item.id, item.qty + 1)} aria-label="Increase" className={styles.qtyBtn}>+</button>
+                  </div>
+                  <button onClick={() => remove(item.id)} className={styles.removeBtn} aria-label={`Remove ${item.name}`}>✕</button>
+                </li>
+              ))}
+            </ul>
+            <div className={styles.footer}>
+              <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>Total</span>
+                <span className={styles.totalAmt}>€{total.toFixed(2)}</span>
+              </div>
+              <button className={styles.checkoutBtn} onClick={onCheckout}>Checkout →</button>
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
+}

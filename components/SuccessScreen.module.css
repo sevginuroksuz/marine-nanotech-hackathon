@@ -1,0 +1,46 @@
+.screen {
+  position: fixed; inset: 0;
+  background: #071120; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.3s ease; padding: 32px;
+}
+.inner {
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center; max-width: 320px;
+}
+.icon { font-size: 4rem; display: block; margin-bottom: 20px; animation: bounceIn 0.6s ease both; }
+.title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; animation: fadeUp 0.4s 0.2s ease both; }
+.orderNum {
+  font-size: 0.88rem; color: var(--cyan);
+  background: rgba(34,211,238,0.08); border: 1px solid rgba(34,211,238,0.2);
+  border-radius: 100px; padding: 4px 14px; margin-bottom: 16px;
+  animation: fadeUp 0.4s 0.3s ease both;
+}
+.msg { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin-bottom: 32px; animation: fadeUp 0.4s 0.35s ease both; }
+
+.trackBtn {
+  background: white;
+  color: var(--blue);
+  border: 2px solid var(--blue);
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  animation: fadeUp 0.4s 0.4s ease both;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.trackBtn:hover {
+  background: var(--blue);
+  color: white;
+}
+
+.btn {
+  background: linear-gradient(135deg, #0e7490, #0891b2);
+  color: #fff; border-radius: 14px; padding: 14px 32px;
+  font-size: 0.92rem; font-weight: 700;
+  box-shadow: 0 4px 20px rgba(8,145,178,0.3);
+  animation: fadeUp 0.4s 0.45s ease both;
+}

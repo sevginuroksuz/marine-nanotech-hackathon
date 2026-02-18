@@ -1,0 +1,38 @@
+import { NextResponse } from "next/server";
+
+export async function POST(req) {
+  try {
+    const body = await req.json();
+    const { orderNumber, total } = body;
+
+    // Mock payment for demo (in production, use Stripe/PayPal)
+    if (process.env.STRIPE_SECRET_KEY) {
+      // Real Stripe integration
+      const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+      
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(total * 100), // cents
+        currency: "eur",
+        metadata: { orderNumber },
+      });
+
+      return NextResponse.json({
+        success: true,
+        clientSecret: paymentIntent.client_secret,
+      });
+    }
+
+    // Mock payment for demo
+    console.log("[payment] Mock payment processed:", { orderNumber, total });
+    
+    return NextResponse.json({
+      success: true,
+      mock: true,
+      message: "Payment processed (demo mode)",
+    });
+
+  } catch (e) {
+    console.error("[payment] error:", e);
+    return NextResponse.json({ error: "Payment failed" }, { status: 500 });
+  }
+}

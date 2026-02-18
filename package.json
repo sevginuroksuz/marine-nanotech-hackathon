@@ -1,0 +1,24 @@
+{
+  "name": "yachtdrop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "prefetch": "node scripts/build-fallback.mjs"
+  },
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "zustand": "^4.5.2",
+    "@upstash/redis": "^1.31.3"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3"
+  }
+}

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yachtdrop — Zero to Running Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#071120;--ocean:#0f2d52;--teal:#0e7490;--cyan:#22d3ee;
+    --gold:#f59e0b;--white:#f0f6ff;--muted:#94a3b8;
+    --card:rgba(15,45,82,0.55);--border:rgba(34,211,238,0.12);
+    --green:#4ade80;--red:#f87171;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(14,116,144,0.15) 0%,transparent 60%);pointer-events:none;z-index:0;}
+  .wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:48px 24px 80px;}
+
+  header{text-align:center;margin-bottom:56px;animation:fadeUp .6s ease both;}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,0.1);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px;}
+  h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,3.2rem);font-weight:800;background:linear-gradient(135deg,var(--white) 30%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.05;margin-bottom:10px;}
+  .sub{color:var(--muted);font-size:.95rem;max-width:480px;margin:0 auto;line-height:1.6;}
+
+  .section-label{display:flex;align-items:center;gap:10px;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);font-weight:700;margin-bottom:14px;}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  /* File tree */
+  .tree{background:rgba(10,22,40,0.8);border:1px solid var(--border);border-radius:14px;padding:20px 24px;font-family:'DM Mono',monospace;font-size:.8rem;line-height:2;margin-bottom:40px;animation:fadeUp .6s .1s ease both;}
+  .tree-dir{color:var(--cyan);}
+  .tree-file{color:#a5f3c0;}
+  .tree-new{color:var(--gold);}
+  .tree-comment{color:#334155;}
+  .tree-indent{margin-left:20px;display:block;}
+
+  /* Steps */
+  .steps{display:flex;flex-direction:column;gap:0;margin-bottom:48px;}
+  .step{display:flex;gap:18px;cursor:pointer;}
+  .step-line{display:flex;flex-direction:column;align-items:center;width:38px;flex-shrink:0;}
+  .step-dot{width:38px;height:38px;border-radius:50%;background:var(--ocean);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--muted);transition:.2s;z-index:1;}
+  .step:hover .step-dot,.step.open .step-dot{background:var(--teal);border-color:var(--cyan);color:#fff;}
+  .step-conn{flex:1;width:2px;background:var(--border);min-height:20px;}
+  .step:last-child .step-conn{display:none;}
+  .step-body{flex:1;padding-bottom:24px;}
+  .step-head{display:flex;align-items:center;gap:10px;padding:8px 0;}
+  .step-title{font-weight:700;font-size:.95rem;}
+  .step-badge{font-size:.68rem;background:rgba(34,211,238,0.1);border:1px solid var(--border);color:var(--cyan);border-radius:100px;padding:2px 10px;}
+  .step-content{display:none;background:rgba(10,22,40,0.7);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-top:8px;}
+  .step.open .step-content{display:block;}
+
+  /* Code blocks */
+  pre{font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.8;overflow-x:auto;padding:0;}
+  .code-wrap{background:rgba(5,13,25,0.9);border:1px solid rgba(34,211,238,0.08);border-radius:10px;overflow:hidden;margin:10px 0;}
+  .code-label{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.05);}
+  .code-label span{font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace;}
+  .copy-btn{font-size:.65rem;background:rgba(34,211,238,0.1);border:1px solid var(--border);border-radius:6px;padding:3px 10px;color:var(--cyan);cursor:pointer;transition:background .15s;}
+  .copy-btn:hover{background:rgba(34,211,238,0.18);}
+  code{display:block;padding:12px 14px;color:#e2e8f0;}
+  .kw{color:#67e8f9;}.cm{color:#334155;font-style:italic;}.st{color:#a5f3c0;}.nm{color:var(--gold);}
+
+  /* Notes */
+  .note{display:flex;gap:10px;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.18);border-radius:10px;padding:12px 14px;font-size:.8rem;color:#fbbf24;line-height:1.55;margin:10px 0;}
+  .note-ok{background:rgba(74,222,128,0.07);border-color:rgba(74,222,128,0.18);color:#4ade80;}
+  .note-info{background:rgba(34,211,238,0.07);border-color:rgba(34,211,238,0.18);color:var(--cyan);}
+
+  /* Structure grid */
+  .struct-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:40px;}
+  .struct-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:.78rem;}
+  .struct-card .sc-title{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--cyan);margin-bottom:6px;}
+  .struct-card .sc-desc{color:var(--muted);line-height:1.5;}
+
+  /* Checklist */
+  .checks{display:flex;flex-direction:column;gap:6px;margin-bottom:40px;}
+  .check{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;transition:border-color .15s;}
+  .check:hover{border-color:rgba(34,211,238,0.25);}
+  .check-box{width:20px;height:20px;border-radius:6px;border:2px solid var(--teal);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;}
+  .check.done .check-box{background:var(--teal);border-color:var(--cyan);}
+  .check.done .check-box::after{content:'✓';font-size:11px;color:#fff;font-weight:800;}
+  .check.done .check-text{text-decoration:line-through;opacity:.5;}
+  .check-text{font-size:.85rem;}
+  .check-tag{margin-left:auto;font-size:.65rem;padding:2px 8px;border-radius:100px;font-weight:700;flex-shrink:0;}
+  .tag-cmd{background:rgba(34,211,238,0.1);color:var(--cyan);border:1px solid var(--border);}
+  .tag-file{background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);}
+  .tag-test{background:rgba(245,158,11,0.1);color:var(--gold);border:1px solid rgba(245,158,11,0.2);}
+
+  .progress-bar{height:6px;background:rgba(255,255,255,0.05);border-radius:100px;overflow:hidden;margin-bottom:6px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--cyan));border-radius:100px;width:0%;transition:width .4s ease;}
+  .progress-label{font-size:.72rem;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:16px;}
+
+  hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Focus */
+  .step:focus-visible,.check:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="chip">⚓ Hackathon Setup Guide</div>
+  <h1>Yachtdrop<br>Zero → Running</h1>
+  <p class="sub">Follow these steps in order. You'll have a live, working app in under 30 minutes.</p>
+</header>
+
+<!-- File structure -->
+<div class="section-label">Project Structure</div>
+<div class="tree" aria-label="Project file tree">
+<span class="tree-dir">yachtdrop/</span>
+<span class="tree-indent"><span class="tree-dir">app/</span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">layout.js</span>          <span class="tree-comment">← fonts, metadata, PWA</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">page.js</span>            <span class="tree-comment">← main page, ties everything</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">globals.css</span>        <span class="tree-comment">← base styles + animations</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-dir">api/products/</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-indent"><span class="tree-new">route.js</span>       <span class="tree-comment">← GET /api/products</span></span></span></span>
+<span class="tree-indent"><span class="tree-dir">components/</span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">Header.js / .module.css</span>       <span class="tree-comment">← search + category chips</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">ProductCard.js / .module.css</span>  <span class="tree-comment">← individual product card</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">ProductGrid.js / .module.css</span>  <span class="tree-comment">← 2-col grid + skeleton</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">CartDrawer.js / .module.css</span>   <span class="tree-comment">← slide-up cart</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">CheckoutSheet.js / .module.css</span><span class="tree-comment">← delivery vs pickup</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">StickyCartBar.js / .module.css</span><span class="tree-comment">← bottom cart bar</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">SuccessScreen.js / .module.css</span><span class="tree-comment">← order confirmed</span></span></span>
+<span class="tree-indent"><span class="tree-dir">lib/</span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">scraper.js</span>   <span class="tree-comment">← Cheerio scraper for nautichandler.com</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">cache.js</span>     <span class="tree-comment">← Upstash Redis cache</span></span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">store.js</span>     <span class="tree-comment">← Zustand cart state</span></span></span>
+<span class="tree-indent"><span class="tree-dir">data/</span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">products-fallback.json</span>  <span class="tree-comment">← backup if scraping fails</span></span></span>
+<span class="tree-indent"><span class="tree-dir">scripts/</span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">build-fallback.mjs</span>  <span class="tree-comment">← run this first!</span></span></span>
+<span class="tree-indent"><span class="tree-dir">public/</span></span>
+<span class="tree-indent"><span class="tree-indent"><span class="tree-new">manifest.json</span>  <span class="tree-comment">← PWA installable</span></span></span>
+<span class="tree-indent"><span class="tree-new">package.json</span></span>
+<span class="tree-indent"><span class="tree-new">next.config.mjs</span></span>
+<span class="tree-indent"><span class="tree-new">.env.local</span></span>
+</div>
+
+<!-- Steps -->
+<div class="section-label">Setup Steps</div>
+<p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Click each step to expand ↓</p>
+<div class="steps" id="steps">
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 1: Create Next.js project">
+    <div class="step-line"><div class="step-dot">1</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">📁 Create the Next.js project</span><span class="step-badge">~2 min</span></div>
+      <div class="step-content">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px;">Open your terminal and run:</p>
+        <div class="code-wrap">
+          <div class="code-label"><span>Terminal</span><button class="copy-btn" onclick="copy(this,'npx create-next-app@latest yachtdrop --app --no-tailwind --eslint --no-src-dir\ncd yachtdrop')">Copy</button></div>
+          <code>npx create-next-app@latest yachtdrop --app --no-tailwind --eslint --no-src-dir
+cd yachtdrop</code>
+        </div>
+        <div class="note note-info">ℹ️ When asked about TypeScript, Tailwind, or import alias — say <strong>No</strong> to TypeScript and Tailwind, <strong>Yes</strong> to <code>@</code> import alias.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 2: Install dependencies">
+    <div class="step-line"><div class="step-dot">2</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">📦 Install dependencies</span><span class="step-badge">~1 min</span></div>
+      <div class="step-content">
+        <div class="code-wrap">
+          <div class="code-label"><span>Terminal</span><button class="copy-btn" onclick="copy(this,'npm install axios cheerio zustand @upstash/redis')">Copy</button></div>
+          <code>npm install axios cheerio zustand @upstash/redis</code>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:10px;">
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.75rem;">
+            <div style="color:var(--cyan);font-family:'DM Mono',monospace;margin-bottom:3px;">axios</div>
+            <div style="color:var(--muted);">HTTP requests for scraper</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.75rem;">
+            <div style="color:var(--cyan);font-family:'DM Mono',monospace;margin-bottom:3px;">cheerio</div>
+            <div style="color:var(--muted);">HTML parser (jQuery-like)</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.75rem;">
+            <div style="color:var(--cyan);font-family:'DM Mono',monospace;margin-bottom:3px;">zustand</div>
+            <div style="color:var(--muted);">Cart state management</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.75rem;">
+            <div style="color:var(--cyan);font-family:'DM Mono',monospace;margin-bottom:3px;">@upstash/redis</div>
+            <div style="color:var(--muted);">Edge-compatible cache</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 3: Copy all the project files">
+    <div class="step-line"><div class="step-dot">3</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">📋 Copy all project files</span><span class="step-badge">~5 min</span></div>
+      <div class="step-content">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px;">Claude has generated every file for you. Download them and copy into the right folders:</p>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:.8rem;">
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">package.json</span><span style="color:var(--muted);">→ replace the root package.json</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">next.config.mjs</span><span style="color:var(--muted);">→ replace the root config</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">app/layout.js, page.js, globals.css</span><span style="color:var(--muted);">→ replace app/ files</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">app/api/products/route.js</span><span style="color:var(--muted);">→ create this folder + file</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">components/ (all files)</span><span style="color:var(--muted);">→ create components/ folder</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">lib/ (all files)</span><span style="color:var(--muted);">→ create lib/ folder</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">data/products-fallback.json</span><span style="color:var(--muted);">→ create data/ folder</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">scripts/build-fallback.mjs</span><span style="color:var(--muted);">→ create scripts/ folder</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <span style="color:var(--gold);font-family:'DM Mono',monospace;flex-shrink:0;">public/manifest.json</span><span style="color:var(--muted);">→ inside existing public/</span>
+          </div>
+        </div>
+        <div class="note" style="margin-top:12px;">⚠️ Delete the default <code>app/page.js</code> and <code>app/globals.css</code> that Next.js created before copying yours.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 4: Set up Upstash Redis">
+    <div class="step-line"><div class="step-dot">4</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">🗄️ Set up Redis (optional but fast)</span><span class="step-badge">~3 min</span></div>
+      <div class="step-content">
+        <div class="note note-ok">✓ Skip Redis and the app still works — it just scrapes live on every cold request (slower).</div>
+        <ol style="font-size:.82rem;color:var(--muted);line-height:2;list-style:decimal;padding-left:20px;margin:10px 0;">
+          <li>Go to <strong style="color:var(--cyan)">upstash.com</strong> → sign up free</li>
+          <li>Create a new Redis database (any region)</li>
+          <li>Copy the <strong>REST URL</strong> and <strong>REST Token</strong></li>
+          <li>Create <code>.env.local</code> in your project root:</li>
+        </ol>
+        <div class="code-wrap">
+          <div class="code-label"><span>.env.local</span><button class="copy-btn" onclick="copy(this,'UPSTASH_REDIS_REST_URL=your_url_here\nUPSTASH_REDIS_REST_TOKEN=your_token_here')">Copy</button></div>
+          <code><span class="kw">UPSTASH_REDIS_REST_URL</span>=your_url_here
+<span class="kw">UPSTASH_REDIS_REST_TOKEN</span>=your_token_here</code>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 5: Pre-scrape fallback products">
+    <div class="step-line"><div class="step-dot">5</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">🕷️ Pre-scrape fallback products</span><span class="step-badge">~2 min</span></div>
+      <div class="step-content">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px;">Run this once <strong style="color:var(--white)">before your demo</strong>. It saves ~100 real products as a JSON fallback so your app never shows empty.</p>
+        <div class="code-wrap">
+          <div class="code-label"><span>Terminal</span><button class="copy-btn" onclick="copy(this,'node scripts/build-fallback.mjs')">Copy</button></div>
+          <code>node scripts/build-fallback.mjs</code>
+        </div>
+        <div class="note">⚠️ Takes 2–3 minutes. Watch for <code>✅ Saved N products</code> at the end. If it shows 0 products, the site may be blocking — that's fine, the app ships with 12 hardcoded fallbacks already.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 6: Run the app locally">
+    <div class="step-line"><div class="step-dot">6</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">🚀 Run locally</span><span class="step-badge">30 sec</span></div>
+      <div class="step-content">
+        <div class="code-wrap">
+          <div class="code-label"><span>Terminal</span><button class="copy-btn" onclick="copy(this,'npm run dev')">Copy</button></div>
+          <code>npm run dev</code>
+        </div>
+        <p style="font-size:.82rem;color:var(--muted);margin-top:10px;">Open <strong style="color:var(--cyan)">http://localhost:3000</strong> in your browser. Test on mobile by opening it on your phone (same WiFi network) at your computer's local IP, e.g. <code>http://192.168.1.x:3000</code>.</p>
+        <div class="note note-ok" style="margin-top:10px;">✓ First load will be slow (~10s) as it scrapes live. Subsequent loads are instant from cache.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" tabindex="0" role="button" aria-expanded="false" onclick="toggleStep(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(this)}" aria-label="Step 7: Deploy to Vercel">
+    <div class="step-line"><div class="step-dot">7</div><div class="step-conn"></div></div>
+    <div class="step-body">
+      <div class="step-head"><span class="step-title">🌐 Deploy to Vercel</span><span class="step-badge">~5 min</span></div>
+      <div class="step-content">
+        <div class="code-wrap">
+          <div class="code-label"><span>Terminal</span><button class="copy-btn" onclick="copy(this,'npx vercel --prod')">Copy</button></div>
+          <code>npx vercel --prod</code>
+        </div>
+        <p style="font-size:.82rem;color:var(--muted);margin:10px 0;">Or push to GitHub → import on <strong style="color:var(--cyan)">vercel.com</strong>. Then add your env vars in the Vercel dashboard under <em>Settings → Environment Variables</em>.</p>
+        <div class="note note-ok">✓ Vercel auto-detects Next.js. Free tier is more than enough for a hackathon.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<!-- Launch checklist -->
+<div class="section-label">Launch Checklist</div>
+<div class="progress-bar"><div class="progress-fill" id="pf"></div></div>
+<div class="progress-label"><span>Progress</span><span id="pl">0 / 10 done</span></div>
+<div class="checks" id="checks">
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="npx create-next-app run">
+    <div class="check-box"></div><span class="check-text"><code>npx create-next-app</code> run</span><span class="check-tag tag-cmd">cmd</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="Dependencies installed">
+    <div class="check-box"></div><span class="check-text">Dependencies installed (<code>npm install axios cheerio zustand @upstash/redis</code>)</span><span class="check-tag tag-cmd">cmd</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="All files copied into project">
+    <div class="check-box"></div><span class="check-text">All generated files copied into correct folders</span><span class="check-tag tag-file">file</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label=".env.local created">
+    <div class="check-box"></div><span class="check-text"><code>.env.local</code> created with Redis credentials (or left blank)</span><span class="check-tag tag-file">file</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="build-fallback.mjs run">
+    <div class="check-box"></div><span class="check-text"><code>node scripts/build-fallback.mjs</code> run successfully</span><span class="check-tag tag-cmd">cmd</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="App runs on localhost:3000">
+    <div class="check-box"></div><span class="check-text">App runs on <code>localhost:3000</code> without errors</span><span class="check-tag tag-test">test</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="Products load on the page">
+    <div class="check-box"></div><span class="check-text">Products load on the page (real or fallback)</span><span class="check-tag tag-test">test</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="Add to cart and checkout flow works">
+    <div class="check-box"></div><span class="check-text">Add to cart → checkout → delivery/pickup → order confirmed ✓</span><span class="check-tag tag-test">test</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="Tested on mobile device">
+    <div class="check-box"></div><span class="check-text">Tested on a real mobile device (thumb reach, tap targets)</span><span class="check-tag tag-test">test</span>
+  </div>
+  <div class="check" tabindex="0" role="checkbox" aria-checked="false" onclick="toggleCheck(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCheck(this)}" aria-label="Deployed to Vercel with live URL">
+    <div class="check-box"></div><span class="check-text">Deployed to Vercel — live URL works 🎉</span><span class="check-tag tag-cmd">deploy</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+  function toggleStep(el) {
+    el.classList.toggle('open');
+    el.setAttribute('aria-expanded', el.classList.contains('open'));
+  }
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    el.setAttribute('aria-checked', el.classList.contains('done'));
+    updateProgress();
+  }
+  function updateProgress() {
+    const all  = document.querySelectorAll('.check');
+    const done = document.querySelectorAll('.check.done');
+    const pct  = Math.round(done.length / all.length * 100);
+    document.getElementById('pf').style.width = pct + '%';
+    document.getElementById('pl').textContent = `${done.length} / ${all.length} done`;
+  }
+  function copy(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1800);
+    });
+  }
+  // Open step 1 by default
+  document.querySelector('.step').classList.add('open');
+  document.querySelector('.step').setAttribute('aria-expanded','true');
+</script>
+</body>
+</html>
