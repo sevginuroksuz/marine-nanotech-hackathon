@@ -1,5 +1,5 @@
 .card {
-  background: rgba(13, 25, 45, 0.9);
+  background: var(--card);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 16px;
   overflow: hidden;
@@ -44,6 +44,7 @@
   object-fit: cover;
   transition: opacity 0.3s ease, transform 0.4s ease;
 }
+.loaded { opacity: 1; }
 .card:hover .img { transform: scale(1.04); }
 .imgOverlay {
   position: absolute;
@@ -107,5 +108,43 @@
   flex-shrink: 0;
 }
 .addBtn:hover { background: #0891b2; }
-.addActive    { background: #0d9488; }
-.addFlash     { transform: scale(0.85); }
+.addActive { background: #0d9488; }
+.addFlash { transform: scale(0.85); }
+.loading { opacity: 0.6; }
+.outOfStock { opacity: 0.5; pointer-events: none; }
+.outOfStockText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.newBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 6px;
+  z-index: 3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+.discountBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--error);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 6px;
+  z-index: 3;
+}

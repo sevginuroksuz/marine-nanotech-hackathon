@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useCart } from "@/lib/store";
-import Header from "@/components/Header";
+import Header from "@/components/header";
 import ProductGrid from "@/components/ProductGrid";
 import CartDrawer from "@/components/CartDrawer";
 import CheckoutSheet from "@/components/CheckoutSheet";
 import StickyCartBar from "@/components/StickyCartBar";
 import SuccessScreen from "@/components/SuccessScreen";
+import fallbackData from "@/data/products-fallback.json";
 
 const CATEGORIES = ["All","Anchoring & Docking","Navigation","Safety","Electrics","Motor","Ropes","Maintenance"];
 
@@ -22,6 +23,7 @@ export default function Home() {
   const [cartOpen,    setCartOpen]    = useState(false);
   const [checkoutOpen,setCheckoutOpen]= useState(false);
   const [orderDone,   setOrderDone]   = useState(null);
+  const [error,       setError]       = useState(null);
   const loaderRef = useRef(null);
   const isFirst   = useRef(true);
   const { count } = useCart();
@@ -29,16 +31,41 @@ export default function Home() {
   const load = useCallback(async (reset = false) => {
     const p = reset ? 1 : page;
     reset ? setLoading(true) : setLoadingMore(true);
+    setError(null);
     try {
       const params = new URLSearchParams({ page: p, limit: 12, category, q: query });
-      const res  = await fetch(`/api/products?${params}`);
+      const res  = await fetch(`/api/products?${params}`, { 
+        signal: AbortSignal.timeout(8000) // 8 second timeout
+      });
+      
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      
       const data = await res.json();
+      if (!data.products || !Array.isArray(data.products)) {
+        throw new Error("Invalid response format");
+      }
+      
       setProducts((prev) => reset ? data.products : [...prev, ...data.products]);
-      setHasMore(data.hasMore);
+      setHasMore(data.hasMore ?? true);
       if (!reset) setPage(p + 1);
       else setPage(2);
+      setError(null);
     } catch (e) {
-      console.error(e);
+      console.error("[load] fetch failed:", e.message);
+      
+      // On error, use fallback data if it's the first load
+      if (reset && fallbackData && fallbackData.length > 0) {
+        const filtered = category === "All" 
+          ? fallbackData 
+          : fallbackData.filter(pr => pr.category === category);
+        setProducts(filtered.slice(0, 12));
+        setHasMore(filtered.length > 12);
+        setPage(2);
+        setError("Using cached data (offline mode)");
+      } else if (!reset) {
+        // Silently fail on pagination
+        setError(null);
+      }
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -49,8 +76,9 @@ export default function Home() {
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && hasMore && !loadingMore && !loading)
+      if (e.isIntersecting && hasMore && !loadingMore && !loading) {
         setPage((p) => p + 1);
+      }
     }, { threshold: 0.1 });
     if (loaderRef.current) obs.observe(loaderRef.current);
     return () => obs.disconnect();
@@ -65,6 +93,17 @@ export default function Home() {
     const t = setTimeout(() => setQuery(searchInput), 350);
     return () => clearTimeout(t);
   }, [searchInput]);
+
+  useEffect(() => {
+    if (cartOpen || checkoutOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [cartOpen, checkoutOpen]);
 
   const handleOrder = (orderNum, trackingUrl) => {
     setCheckoutOpen(false);
@@ -82,19 +121,31 @@ export default function Home() {
         cartCount={count}
         onCartOpen={() => setCartOpen(true)}
       />
+      {error && (
+        <div style={{
+          padding: "8px 12px",
+          margin: "8px 8px 0",
+          background: "rgba(34, 211, 238, 0.1)",
+          border: "1px solid rgba(34, 211, 238, 0.3)",
+          borderRadius: "8px",
+          color: "#22d3ee",
+          fontSize: "0.85rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px"
+        }}>
+          <span>ℹ️</span>
+          {error}
+        </div>
+      )}
       <ProductGrid
         products={products}
         loading={loading}
         loadingMore={loadingMore}
         loaderRef={loaderRef}
         hasMore={hasMore}
+        onRefresh={() => load(true)}
       />
-      {count > 0 && !cartOpen && (
-        <StickyCartBar
-          onOpen={() => setCartOpen(true)}
-          onCheckout={() => { setCartOpen(false); setCheckoutOpen(true); }}
-        />
-      )}
       {cartOpen && (
         <CartDrawer
           onClose={() => setCartOpen(false)}

@@ -1,46 +1,55 @@
+/* My Orders Page */
 .container {
-  max-width: 800px;
+  max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
-  background: linear-gradient(135deg, #071120 0%, #0a1929 100%);
-  padding: 0;
+  background: var(--navy);
+  padding-bottom: 100px;
 }
 
 .header {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.6) 0%, rgba(15, 45, 82, 0.8) 100%);
+  padding: 16px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .backBtn {
-  background: rgba(255,255,255,0.1);
+  background: transparent;
   border: none;
-  color: white;
-  font-size: 14px;
+  color: var(--cyan);
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 8px 16px;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  transition: all 0.2s;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border-radius: 0;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .backBtn:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateX(-4px);
+  transform: translateX(-2px);
 }
 
 .title {
-  font-size: 28px;
+  font-size: 1.5rem;
   font-weight: 800;
-  color: white;
-  margin-bottom: 4px;
+  color: var(--white);
+  margin: 0 0 4px;
+  padding: 0;
 }
 
 .phone {
-  font-size: 14px;
-  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  color: var(--muted);
   font-weight: 500;
+  margin: 4px 0 0;
+  padding: 0;
 }
 
 .ordersList {
@@ -51,75 +60,85 @@
 }
 
 .orderCard {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 16px;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(34, 211, 238, 0.1);
+  animation: fadeUp 0.3s ease both;
 }
 
 .orderCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  border-color: rgba(34, 211, 238, 0.2);
+  background: rgba(15, 45, 82, 0.7);
 }
 
 .orderCard:active {
-  transform: translateY(-2px);
+  transform: translateY(0);
 }
 
 .orderHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.08);
 }
 
 .orderNumber {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 700;
-  color: #071120;
+  color: var(--white);
   display: block;
   margin-bottom: 4px;
 }
 
 .orderDate {
-  font-size: 13px;
-  color: #666;
+  font-size: 0.75rem;
+  color: var(--muted);
   display: block;
+  font-weight: 500;
 }
 
 .status {
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .orderDetails {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .detailRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  font-size: 0.85rem;
 }
 
 .label {
-  color: #666;
+  color: var(--muted);
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .value {
-  color: #1a1a1a;
+  color: var(--white);
   font-weight: 600;
   text-align: right;
 }
@@ -129,42 +148,69 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid rgba(34, 211, 238, 0.08);
 }
 
-.total {
-  font-size: 24px;
+.amount {
+  font-size: 1rem;
   font-weight: 800;
-  color: #1976d2;
+  color: var(--cyan);
+}
+
+.amountLabel {
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 2px;
 }
 
 .arrow {
-  font-size: 24px;
-  color: #1976d2;
-  transition: transform 0.2s;
+  color: var(--teal);
+  font-size: 0.9rem;
 }
 
-.orderCard:hover .arrow {
-  transform: translateX(4px);
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--muted);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.emptyTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0 0 8px;
+}
+
+.emptyText {
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .loading {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  color: white;
+  color: var(--muted);
+  gap: 16px;
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255,255,255,0.2);
-  border-top-color: white;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(34, 211, 238, 0.2);
+  border-top-color: var(--cyan);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin-bottom: 16px;
 }
 
 @keyframes spin {
@@ -172,86 +218,48 @@
 }
 
 .error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
   padding: 20px;
   text-align: center;
-  color: white;
+  color: #ff6b6b;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .error h2 {
-  margin-bottom: 20px;
-}
-
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  text-align: center;
-  color: white;
-}
-
-.emptyIcon {
-  font-size: 80px;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.empty h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.empty p {
-  font-size: 16px;
-  opacity: 0.7;
-  margin-bottom: 24px;
+  font-size: 1.2rem;
+  margin: 0 0 16px;
 }
 
 .btn {
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-  color: white;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 100%);
+  color: #071120;
   border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+  transition: all 0.2s ease;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
 }
 
-.btn:active {
-  transform: translateY(0);
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  .orderCard {
-    padding: 16px;
-  }
-
-  .orderNumber {
-    font-size: 16px;
-  }
-
-  .total {
-    font-size: 20px;
-  }
-
-  .status {
-    font-size: 12px;
-    padding: 4px 8px;
-  }
+.arrow {
+  color: var(--cyan);
+  font-size: 0.9rem;
 }

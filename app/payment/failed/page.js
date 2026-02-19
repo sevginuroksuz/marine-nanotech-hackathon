@@ -1,9 +1,10 @@
 "use client";
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function PaymentFailedPage() {
+function PaymentFailedContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("order");
@@ -113,5 +114,13 @@ export default function PaymentFailedPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentFailedPage() {
+  return (
+    <Suspense fallback={<div className={styles.container}><div className={styles.card}><div className={styles.spinner} /><p className={styles.loadingText}>Loading...</p></div></div>}>
+      <PaymentFailedContent />
+    </Suspense>
   );
 }

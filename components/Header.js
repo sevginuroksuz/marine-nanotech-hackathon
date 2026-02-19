@@ -1,9 +1,9 @@
 "use client";
+import { usePathname } from "next/navigation";
 import styles from "./header.module.css";
-import { useRouter } from "next/navigation";
 
 export default function Header({ searchInput, onSearch, categories, activeCategory, onCategory, cartCount, onCartOpen }) {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <header className={styles.header}>
@@ -13,13 +13,12 @@ export default function Header({ searchInput, onSearch, categories, activeCatego
           <div className={styles.logoSub}>Parts delivered to your berth</div>
         </div>
         <div className={styles.actions}>
-          <button 
-            className={styles.trackBtn} 
-            onClick={() => router.push("/track")}
-            aria-label="Track my orders"
-          >
-            📦 My Orders
-          </button>
+          <a href="/profile" className={`${styles.profileBtn} ${pathname === "/profile" ? styles.profileBtnActive : ""}`} aria-current={pathname === "/profile" ? "page" : undefined} aria-label="Profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </a>
           <button className={styles.cartBtn} onClick={onCartOpen} aria-label={`Cart, ${cartCount} items`}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>

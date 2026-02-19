@@ -1,0 +1,65 @@
+/* Swipeable Cart Item - Native App Feel */
+.swipeItem {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: pan-x;
+}
+
+.swipeItemDeleted {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 0.3s ease-out;
+}
+
+.swipeAction {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.2);
+  z-index: 1;
+  border-left: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+.deleteBtn {
+  background: transparent;
+  border: none;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s;
+}
+
+.deleteBtn:hover {
+  color: #f87171;
+  transform: scale(1.1);
+}
+
+.itemContent {
+  background: #0d1f35;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  transition: background 0.2s;
+}
+
+/* Haptic feedback visual */
+@keyframes haptic {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.deleteBtn:active {
+  animation: haptic 0.1s ease-in-out;
+}

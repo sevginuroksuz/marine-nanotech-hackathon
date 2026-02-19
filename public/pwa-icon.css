@@ -1,0 +1,25 @@
+/* PWA App Icon Placeholder - Replace with 192x192 PNG */
+.pwa-icon {
+  width: 192px;
+  height:  192px;
+  background: linear-gradient(135deg, #071120 0%, #0e7490 100%);
+  border-radius: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 113, 32, 0.4);
+}
+
+.pwa-icon::before {
+  content: "⚓";
+  font-size: 80px;
+  color: #22d3ee;
+}
+
+/* For generating real icon:
+ * Use Figma or design tool to create 192x192 PNG
+ * Name files: icon-192.png, icon-512.png, icon-1024.png
+ * Place in public/ folder
+ * Update manifest.json src paths if needed
+ * Add favicon.ico for browser tab icon
+ */

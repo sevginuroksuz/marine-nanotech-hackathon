@@ -61,14 +61,14 @@ export default function TrackOrderPage() {
   return (
     <div className={styles.container}>
       <button className={styles.backBtn} onClick={() => router.push("/")}>
-        ← Back to Store
+        ← Back
       </button>
 
       <div className={styles.card}>
-        <div className={styles.icon}>📦</div>
-        <h1 className={styles.title}>Track Your Orders</h1>
+        <div className={styles.icon}>🚤</div>
+        <h1 className={styles.title}>Track Your Order</h1>
         <p className={styles.subtitle}>
-          Check the status of your deliveries
+          Find your delivery status
         </p>
 
         <div className={styles.toggle}>

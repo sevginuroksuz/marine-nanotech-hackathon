@@ -1,9 +1,10 @@
 "use client";
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("order");
@@ -38,14 +39,18 @@ export default function PaymentSuccessPage() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push(`/orders/${orderNumber}`);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timer);
+    // Redirect after 5 seconds
+    const redirectTimer = setTimeout(() => {
+      router.push(`/orders/${orderNumber}`);
+    }, 5000);
+
+    return () => { clearInterval(timer); clearTimeout(redirectTimer); };
   }, [orderNumber, router]);
 
   if (loading) {
@@ -63,9 +68,9 @@ export default function PaymentSuccessPage() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.icon}>✅</div>
-        <h1 className={styles.title}>Payment Successful!</h1>
+        <h1 className={styles.title}>Order Confirmed!</h1>
         <p className={styles.message}>
-          Your order <strong>{orderNumber}</strong> has been confirmed.
+          Your order <strong>{orderNumber}</strong> has been placed successfully.
         </p>
 
         {order && (
@@ -101,7 +106,7 @@ export default function PaymentSuccessPage() {
             </div>
 
             <div className={styles.total}>
-              <span className={styles.totalLabel}>Total Paid:</span>
+              <span className={styles.totalLabel}>Total:</span>
               <span className={styles.totalAmount}>€{order.total.toFixed(2)}</span>
             </div>
           </div>
@@ -127,5 +132,12 @@ export default function PaymentSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<div className={styles.container}><div className={styles.card}><div className={styles.spinner} /><p className={styles.loadingText}>Loading...</p></div></div>}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

@@ -106,27 +106,27 @@ export default function OrderTrackingPage() {
             </div>
             <div className={styles.row}>
               <span className={styles.label}>Customer:</span>
-              <span style={{color: 'var(--navy)', fontWeight: 500}}>{order.name || "N/A"}</span>
+              <span>{order.name || "N/A"}</span>
             </div>
             {order.phone && (
               <div className={styles.row}>
                 <span className={styles.label}>Phone:</span>
-                <span style={{color: 'var(--navy)', fontWeight: 500}}>{order.phone}</span>
+                <span>{order.phone}</span>
               </div>
             )}
             <div className={styles.row}>
               <span className={styles.label}>Marina:</span>
-              <span style={{color: 'var(--navy)', fontWeight: 500}}>{order.marina || "N/A"}</span>
+              <span>{order.marina || "N/A"}</span>
             </div>
             {order.berth && (
               <div className={styles.row}>
                 <span className={styles.label}>Berth:</span>
-                <span style={{color: 'var(--navy)', fontWeight: 500}}>{order.berth}</span>
+                <span>{order.berth}</span>
               </div>
             )}
             <div className={styles.row}>
               <span className={styles.label}>Order Date:</span>
-              <span style={{color: 'var(--navy)', fontWeight: 500}}>
+              <span>
                 {new Date(order.createdAt).toLocaleString('en-GB', {
                   day: '2-digit',
                   month: 'short',

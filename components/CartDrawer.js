@@ -1,6 +1,7 @@
 "use client";
 import { useCart } from "@/lib/store";
 import styles from "./CartDrawer.module.css";
+import SwipeableCartItem from "./SwipeableCartItem";
 
 export default function CartDrawer({ onClose, onCheckout }) {
   const { items, remove, updateQty } = useCart();
@@ -24,21 +25,26 @@ export default function CartDrawer({ onClose, onCheckout }) {
           <>
             <ul className={styles.list}>
               {items.map((item) => (
-                <li key={item.id} className={styles.item}>
-                  {item.imageUrl && (
-                    <img src={item.imageUrl} alt={item.name} className={styles.itemImg} />
-                  )}
-                  <div className={styles.itemInfo}>
-                    <p className={styles.itemName}>{item.name}</p>
+                <SwipeableCartItem
+                  key={item.id}
+                  item={item}
+                  onRemove={() => remove(item.id)}
+                >
+                  <li className={styles.itemInner}>
+                    {item.imageUrl && (
+                      <img src={item.imageUrl} alt={item.name} className={styles.itemImg} />
+                    )}
+                    <div className={styles.itemInfo}>
+                      <p className={styles.itemName}>{item.name}</p>
+                    </div>
+                    <div className={styles.qtyRow}>
+                      <button onClick={() => updateQty(item.id, item.qty - 1)} aria-label="Decrease" className={styles.qtyBtn}>−</button>
+                      <span className={styles.qty}>{item.qty}</span>
+                      <button onClick={() => updateQty(item.id, item.qty + 1)} aria-label="Increase" className={styles.qtyBtn}>+</button>
+                    </div>
                     <p className={styles.itemPrice}>€{(item.price * item.qty).toFixed(2)}</p>
-                  </div>
-                  <div className={styles.qtyRow}>
-                    <button onClick={() => updateQty(item.id, item.qty - 1)} aria-label="Decrease" className={styles.qtyBtn}>−</button>
-                    <span className={styles.qty}>{item.qty}</span>
-                    <button onClick={() => updateQty(item.id, item.qty + 1)} aria-label="Increase" className={styles.qtyBtn}>+</button>
-                  </div>
-                  <button onClick={() => remove(item.id)} className={styles.removeBtn} aria-label={`Remove ${item.name}`}>✕</button>
-                </li>
+                  </li>
+                </SwipeableCartItem>
               ))}
             </ul>
             <div className={styles.footer}>

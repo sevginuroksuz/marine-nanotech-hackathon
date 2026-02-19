@@ -1,3 +1,4 @@
+/* Modern Header - Uber Eats Inspired */
 .header {
   position: sticky;
   top: 0;
@@ -11,6 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   margin-bottom: 12px;
 }
 .logo {
@@ -30,23 +32,6 @@
   align-items: center;
   gap: 8px;
 }
-.trackBtn {
-  background: rgba(147, 51, 234, 0.1);
-  border: 1px solid rgba(147, 51, 234, 0.3);
-  color: #c084fc;
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: all 0.15s;
-}
-.trackBtn:hover {
-  background: rgba(147, 51, 234, 0.2);
-  transform: translateY(-1px);
-}
 .cartBtn {
   position: relative;
   background: rgba(34, 211, 238, 0.08);
@@ -59,19 +44,39 @@
   transition: background 0.15s;
 }
 .cartBtn:hover { background: rgba(34, 211, 238, 0.14); }
+.profileBtn {
+  position: relative;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  color: var(--cyan);
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.profileBtn:hover { background: rgba(34, 211, 238, 0.14); }
+.profileBtnActive {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.35);
+}
 .badge {
   position: absolute;
-  top: -6px; right: -6px;
-  background: var(--teal);
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
   color: #fff;
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: 0.65rem;
+  font-weight: 800;
   border-radius: 50%;
-  width: 17px; height: 17px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 2px solid var(--navy);
+  line-height: 1;
 }
 .searchWrap {
   position: relative;
@@ -96,7 +101,7 @@
   transition: border-color 0.2s;
 }
 .searchInput:focus { border-color: rgba(34, 211, 238, 0.35); }
-.searchInput::placeholder { color: #475569; }
+.searchInput::placeholder { color: #475569; text-align: left; }
 .clearBtn {
   position: absolute;
   right: 10px; top: 50%;

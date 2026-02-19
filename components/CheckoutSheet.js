@@ -24,8 +24,6 @@ export default function CheckoutSheet({ onClose, onOrder }) {
   const [email,  setEmail]  = useState("");
   const [error,  setError]  = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [paymentStep, setPaymentStep] = useState(false);
-  const [paymentIframe, setPaymentIframe] = useState("");
 
   const handleSubmit = async () => {
     if (!name.trim()) { setError("Please enter your name."); return; }
@@ -62,38 +60,9 @@ export default function CheckoutSheet({ onClose, onOrder }) {
         return;
       }
 
-      // Initialize PayTR payment
-      const paymentResponse = await fetch("/api/payment/paytr", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderNumber: orderData.orderNumber,
-          total,
-          name: name.trim(),
-          phone: phone.trim(),
-          email: email.trim(),
-        }),
-      });
-
-      const paymentData = await paymentResponse.json();
-
-      if (!paymentResponse.ok) {
-        setError(paymentData.error || "Payment initialization failed");
-        setSubmitting(false);
-        return;
-      }
-
-      // Show payment iframe
-      if (paymentData.demo) {
-        // Demo mode - redirect to success page
-        clear();
-        window.location.href = `/payment/success?order=${orderData.orderNumber}`;
-      } else {
-        // Real PayTR - show iframe
-        setPaymentIframe(paymentData.iframeUrl);
-        setPaymentStep(true);
-        setSubmitting(false);
-      }
+      // Order placed successfully - clear cart and redirect
+      clear();
+      window.location.href = `/payment/success?order=${orderData.orderNumber}`;
 
     } catch (e) {
       console.error("[checkout] error:", e);
@@ -104,39 +73,20 @@ export default function CheckoutSheet({ onClose, onOrder }) {
 
   return (
     <>
-      <div className={styles.backdrop} onClick={paymentStep ? undefined : onClose} aria-hidden="true" />
+      <div className={styles.backdrop} onClick={onClose} aria-hidden="true" />
       <div className={styles.sheet} role="dialog" aria-label="Checkout" aria-modal="true">
         <div className={styles.handle} />
         <div className={styles.topRow}>
-          <h2 className={styles.title}>{paymentStep ? "Payment" : "Checkout"}</h2>
+          <div />
           <button 
             className={styles.closeBtn} 
-            onClick={paymentStep ? undefined : onClose} 
+            onClick={onClose} 
             aria-label="Close"
-            disabled={paymentStep}
           >
             ✕
           </button>
         </div>
         <div className={styles.body}>
-          {paymentStep ? (
-            <div className={styles.paymentContainer}>
-              <p className={styles.paymentInfo}>
-                Complete your payment securely with PayTR
-              </p>
-              <iframe
-                src={paymentIframe}
-                className={styles.paymentIframe}
-                frameBorder="0"
-                scrolling="no"
-                title="PayTR Payment"
-              />
-              <p className={styles.paymentNote}>
-                🔒 Secure payment powered by PayTR
-              </p>
-            </div>
-          ) : (
-            <>
               <div className={styles.toggleWrap} role="group" aria-label="Fulfilment method">
                 <button
                   className={`${styles.toggle} ${mode === "delivery" ? styles.toggleActive : ""}`}
@@ -196,10 +146,8 @@ export default function CheckoutSheet({ onClose, onOrder }) {
                 onClick={handleSubmit}
                 disabled={submitting}
               >
-                {submitting ? "Processing..." : "💳 Proceed to Payment"}
+                {submitting ? "Processing..." : "� Place Order"}
               </button>
-            </>
-          )}
         </div>
       </div>
     </>

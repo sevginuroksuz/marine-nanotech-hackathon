@@ -48,7 +48,7 @@ export async function POST(req) {
     const orderNumber = `YD-${Math.floor(Math.random() * 90000 + 10000)}`;
     const order = {
       orderNumber,
-      status: "pending",
+      status: "confirmed",
       name,
       phone: phone || "",
       email: email || "",
@@ -58,7 +58,7 @@ export async function POST(req) {
       items,
       total,
       createdAt: new Date().toISOString(),
-      paymentStatus: "pending",
+      paymentStatus: "paid",
     };
 
     // Save
@@ -124,8 +124,9 @@ async function sendEmailNotification(order) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "YachtDrop <orders@yachtdrop.com>",
-          to: process.env.NOTIFICATION_EMAIL || "christian@marinenanotech.com",
+          // from: "YachtDrop <orders@yachtdrop.com>", // Domain doğrulandıktan sonra aç
+          from: "YachtDrop <onboarding@resend.dev>",
+          to: process.env.NOTIFICATION_EMAIL || "sevginuroksuz@gmail.com",
           subject: `New Order: ${order.orderNumber}`,
           html: `
             <h2>New YachtDrop Order</h2>
