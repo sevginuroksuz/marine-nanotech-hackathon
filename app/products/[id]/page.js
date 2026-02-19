@@ -11,6 +11,7 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [descOpen, setDescOpen] = useState(false);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -105,8 +106,24 @@ export default function ProductDetailPage() {
         <span className={styles.categoryChip}>{product.category}</span>
         <h1 className={styles.title}>{product.name}</h1>
 
-        {product.shortDescription && (
-          <p className={styles.description}>{product.shortDescription}</p>
+        {(product.shortDescription || product.description) && (
+          <div className={styles.descriptionSection}>
+            <button
+              className={`${styles.descToggle} ${descOpen ? styles.descToggleOpen : ""}`}
+              onClick={() => setDescOpen(!descOpen)}
+              aria-expanded={descOpen}
+            >
+              <span>Description</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={styles.descChevron}>
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+            {descOpen && (
+              <p className={styles.description}>
+                {product.description || product.shortDescription}
+              </p>
+            )}
+          </div>
         )}
 
         {/* Price */}

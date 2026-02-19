@@ -12,5 +12,5 @@
 .end { text-align: center; font-size: 0.75rem; color: #283447; padding: 12px 0 24px; }
 .empty { text-align: center; padding: 60px 24px; animation: fadeIn 0.3s ease; }
 .emptyIcon { font-size: 80px; display: block; margin-bottom: 20px; opacity: 0.5; }
-.emptyTitle { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+.emptyTitle { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
 .emptyText { font-size: 0.85rem; color: #64748b; }

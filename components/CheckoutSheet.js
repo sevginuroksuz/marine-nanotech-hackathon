@@ -60,9 +60,11 @@ export default function CheckoutSheet({ onClose, onOrder }) {
         return;
       }
 
-      // Order placed successfully - clear cart and redirect
+      // Order placed successfully - clear cart and notify parent
       clear();
-      window.location.href = `/payment/success?order=${orderData.orderNumber}`;
+      if (onOrder) {
+        onOrder(orderData.orderNumber, orderData.trackingUrl || `/orders/${orderData.orderNumber}`);
+      }
 
     } catch (e) {
       console.error("[checkout] error:", e);
@@ -146,7 +148,7 @@ export default function CheckoutSheet({ onClose, onOrder }) {
                 onClick={handleSubmit}
                 disabled={submitting}
               >
-                {submitting ? "Processing..." : "� Place Order"}
+                {submitting ? "Processing..." : "🛒 Place Order"}
               </button>
         </div>
       </div>

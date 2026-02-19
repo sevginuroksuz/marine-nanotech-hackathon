@@ -1,0 +1,136 @@
+/* Terms & Privacy Page Styles */
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--navy);
+  padding-bottom: 100px;
+}
+
+.header {
+  background: linear-gradient(135deg, rgba(15, 45, 82, 0.8) 0%, rgba(14, 116, 144, 0.6) 100%);
+  padding: 32px 16px 24px;
+  text-align: center;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+  position: relative;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--white);
+  margin: 0 0 4px;
+}
+
+.header p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.backBtn {
+  position: absolute;
+  left: 12px;
+  top: 32px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--cyan);
+  transition: all 0.2s;
+}
+
+.backBtn:active {
+  transform: scale(0.92);
+  background: rgba(34, 211, 238, 0.2);
+}
+
+.content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  animation: fadeUp 0.3s ease both;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cyan);
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.section {
+  margin-bottom: 16px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h3 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0 0 6px;
+}
+
+.section p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0 0 6px;
+}
+
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+.section ul {
+  padding-left: 18px;
+  margin: 6px 0 0;
+}
+
+.section li {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 4px;
+}
+
+.section li strong {
+  color: var(--white);
+}
+
+.section p strong {
+  color: var(--white);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 16px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.footer p {
+  margin: 4px 0;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

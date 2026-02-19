@@ -26,9 +26,6 @@ export default function OrderTrackingPage() {
         const res = await fetch(`/api/orders/${orderNumber}`);
         const data = await res.json();
         
-        console.log("API Response:", data);
-        console.log("Order data:", data.order);
-        
         if (res.ok) {
           setOrder(data.order);
         } else {

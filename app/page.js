@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useCart } from "@/lib/store";
+import { useCart, useToast } from "@/lib/store";
 import Header from "@/components/header";
 import ProductGrid from "@/components/ProductGrid";
 import CartDrawer from "@/components/CartDrawer";
 import CheckoutSheet from "@/components/CheckoutSheet";
-import StickyCartBar from "@/components/StickyCartBar";
 import SuccessScreen from "@/components/SuccessScreen";
+import { ToastContainer } from "@/components/Toast";
 import fallbackData from "@/data/products-fallback.json";
 
 const CATEGORIES = ["All","Anchoring & Docking","Navigation","Safety","Electrics","Motor","Ropes","Maintenance"];
@@ -27,6 +27,7 @@ export default function Home() {
   const loaderRef = useRef(null);
   const isFirst   = useRef(true);
   const { count } = useCart();
+  const { toasts, remove: removeToast } = useToast();
 
   const load = useCallback(async (reset = false) => {
     const p = reset ? 1 : page;
@@ -105,6 +106,13 @@ export default function Home() {
     };
   }, [cartOpen, checkoutOpen]);
 
+  // Listen for TabBar cart button
+  useEffect(() => {
+    const openCart = () => setCartOpen(true);
+    window.addEventListener("yachtdrop:opencart", openCart);
+    return () => window.removeEventListener("yachtdrop:opencart", openCart);
+  }, []);
+
   const handleOrder = (orderNum, trackingUrl) => {
     setCheckoutOpen(false);
     setOrderDone({ orderNumber: orderNum, trackingUrl });
@@ -165,6 +173,7 @@ export default function Home() {
           onDone={() => setOrderDone(null)}
         />
       )}
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </main>
   );
 }

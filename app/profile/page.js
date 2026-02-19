@@ -131,13 +131,13 @@ export default function ProfilePage() {
         {/* Help & Support */}
         <section className={styles.card}>
           <h2 className={styles.sectionTitle}>Help & Support</h2>
-          <button className={styles.linkBtn}>
+          <button className={styles.linkBtn} onClick={() => router.push("/faq")}>
             <span>❓</span> FAQs
           </button>
-          <button className={styles.linkBtn}>
+          <button className={styles.linkBtn} onClick={() => router.push("/contact")}>
             <span>📧</span> Contact Support
           </button>
-          <button className={styles.linkBtn}>
+          <button className={styles.linkBtn} onClick={() => router.push("/terms")}>
             <span>📋</span> Terms & Privacy
           </button>
         </section>

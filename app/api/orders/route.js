@@ -124,9 +124,8 @@ async function sendEmailNotification(order) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          // from: "YachtDrop <orders@yachtdrop.com>", // Domain doğrulandıktan sonra aç
           from: "YachtDrop <onboarding@resend.dev>",
-          to: process.env.NOTIFICATION_EMAIL || "sevginuroksuz@gmail.com",
+          to: process.env.NOTIFICATION_EMAIL || "orders@yachtdrop.com",
           subject: `New Order: ${order.orderNumber}`,
           html: `
             <h2>New YachtDrop Order</h2>
