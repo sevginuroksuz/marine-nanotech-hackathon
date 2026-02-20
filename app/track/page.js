@@ -30,27 +30,41 @@ export default function TrackOrderPage() {
     setError("");
 
     try {
-      if (trackBy === "order") {
-        // Track by order number - redirect to order details
-        const res = await fetch(`/api/orders/${orderNumber.trim()}`);
-        const data = await res.json();
+      const localOrders = JSON.parse(localStorage.getItem("yachtdrop_orders") || "[]");
 
+      if (trackBy === "order") {
+        const num = orderNumber.trim().toUpperCase();
+        // Check localStorage first
+        const localMatch = localOrders.find(o => o.orderNumber === num);
+        if (localMatch) {
+          router.push(`/orders/${num}`);
+          return;
+        }
+        // Fallback to API
+        const res = await fetch(`/api/orders/${num}`);
         if (res.ok) {
-          router.push(`/orders/${orderNumber.trim()}`);
+          router.push(`/orders/${num}`);
         } else {
-          setError(data.error || "Order not found");
+          setError("Order not found. Make sure you're using the same device you ordered from.");
         }
       } else {
-        // Track by phone - redirect to orders list
-        const res = await fetch(`/api/orders?phone=${encodeURIComponent(phone.trim())}`);
-        const data = await res.json();
-
+        const ph = phone.trim();
+        // Check localStorage first
+        const localMatches = localOrders.filter(o =>
+          o.phone && o.phone.replace(/\s/g, "").includes(ph.replace(/\s/g, ""))
+        );
+        if (localMatches.length > 0) {
+          sessionStorage.setItem("trackPhone", ph);
+          router.push("/my-orders");
+          return;
+        }
+        // Fallback to API
+        const res = await fetch(`/api/orders?phone=${encodeURIComponent(ph)}`);
         if (res.ok) {
-          // Store phone in sessionStorage and redirect
-          sessionStorage.setItem("trackPhone", phone.trim());
+          sessionStorage.setItem("trackPhone", ph);
           router.push("/my-orders");
         } else {
-          setError(data.error || "No orders found for this phone number");
+          setError("No orders found for this phone number.");
         }
       }
     } catch (e) {
