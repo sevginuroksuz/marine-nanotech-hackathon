@@ -23,6 +23,18 @@ export default function OrderTrackingPage() {
           return;
         }
 
+        // Try localStorage first (works on Vercel where filesystem is read-only)
+        try {
+          const localOrders = JSON.parse(localStorage.getItem("yachtdrop_orders") || "[]");
+          const localOrder = localOrders.find(o => o.orderNumber === orderNumber);
+          if (localOrder) {
+            setOrder(localOrder);
+            setLoading(false);
+            return;
+          }
+        } catch {}
+
+        // Fallback to API
         const res = await fetch(`/api/orders/${orderNumber}`);
         const data = await res.json();
         

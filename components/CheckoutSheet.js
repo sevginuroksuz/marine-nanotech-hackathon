@@ -66,7 +66,28 @@ export default function CheckoutSheet({ onClose, onOrder }) {
         return;
       }
 
-      // Order placed successfully - clear cart and notify parent
+      // Order placed successfully - save to localStorage for tracking
+      const savedOrder = {
+        orderNumber: orderData.orderNumber,
+        status: "confirmed",
+        name: name.trim(),
+        phone: phone.trim(),
+        email: email.trim(),
+        marina: marina.trim(),
+        berth: berth.trim(),
+        mode,
+        items,
+        total,
+        createdAt: new Date().toISOString(),
+        paymentStatus: "paid",
+        trackingUrl: orderData.trackingUrl || `/orders/${orderData.orderNumber}`,
+      };
+      try {
+        const existing = JSON.parse(localStorage.getItem("yachtdrop_orders") || "[]");
+        existing.unshift(savedOrder);
+        localStorage.setItem("yachtdrop_orders", JSON.stringify(existing));
+      } catch {}
+
       clear();
       if (onOrder) {
         onOrder(orderData.orderNumber, orderData.trackingUrl || `/orders/${orderData.orderNumber}`);

@@ -23,6 +23,19 @@ export default function MyOrdersPage() {
 
   const fetchOrders = async (phoneNumber) => {
     try {
+      // Read from localStorage first (works on Vercel)
+      const localOrders = JSON.parse(localStorage.getItem("yachtdrop_orders") || "[]");
+      const filtered = phoneNumber
+        ? localOrders.filter(o => o.phone && o.phone.replace(/\s/g, "").includes(phoneNumber.replace(/\s/g, "")))
+        : localOrders;
+
+      if (filtered.length > 0) {
+        setOrders(filtered);
+        setLoading(false);
+        return;
+      }
+
+      // Fallback to API
       const res = await fetch(`/api/orders?phone=${encodeURIComponent(phoneNumber)}`);
       const data = await res.json();
 

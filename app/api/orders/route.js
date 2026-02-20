@@ -61,10 +61,12 @@ export async function POST(req) {
       paymentStatus: "paid",
     };
 
-    // Save
-    const orders = await getOrders();
-    orders.push(order);
-    await saveOrders(orders);
+    // Save to file (best-effort — Vercel filesystem is read-only, localStorage handles client-side)
+    try {
+      const orders = await getOrders();
+      orders.push(order);
+      await saveOrders(orders);
+    } catch {}
 
     // Send email notification (async, don't wait)
     sendEmailNotification(order).catch(err => 
