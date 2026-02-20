@@ -1,9 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useT } from "@/lib/i18n";
 import styles from "./SuccessScreen.module.css";
 
 export default function SuccessScreen({ orderNumber, trackingUrl, onDone }) {
   const router = useRouter();
+  const { t } = useT();
 
   const handleTrackOrder = () => {
     if (trackingUrl) {
@@ -20,20 +22,20 @@ export default function SuccessScreen({ orderNumber, trackingUrl, onDone }) {
           </svg>
         </div>
 
-        <h2 className={styles.title}>Order Confirmed!</h2>
-        <p className={styles.orderNum}>Order #{orderNumber}</p>
-        <p className={styles.msg}>Your parts are on their way.<br/>We'll deliver to your berth shortly.</p>
+        <h2 className={styles.title}>{t("success.title")}</h2>
+        <p className={styles.orderNum}>{t("success.orderNum", { orderNumber })}</p>
+        <p className={styles.msg}>{t("success.message")}</p>
 
         {trackingUrl && (
           <button className={styles.trackBtn} onClick={handleTrackOrder}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
             </svg>
-            Track Your Order
+            {t("success.trackOrder")}
           </button>
         )}
 
-        <button className={styles.btn} onClick={onDone}>Continue Shopping</button>
+        <button className={styles.btn} onClick={onDone}>{t("success.continueShopping")}</button>
 
         <button className={styles.shareBtn}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -43,7 +45,7 @@ export default function SuccessScreen({ orderNumber, trackingUrl, onDone }) {
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
           </svg>
-          Share Order Details
+          {t("success.shareOrder")}
         </button>
       </div>
     </div>

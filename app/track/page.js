@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useT } from "@/lib/i18n";
 import styles from "./page.module.css";
 
 export default function TrackOrderPage() {
   const router = useRouter();
+  const { t } = useT();
   const [trackBy, setTrackBy] = useState("phone"); // "phone" or "order"
   const [orderNumber, setOrderNumber] = useState("");
   const [phone, setPhone] = useState("");
@@ -60,16 +62,12 @@ export default function TrackOrderPage() {
 
   return (
     <div className={styles.container}>
-      <button className={styles.backBtn} onClick={() => router.push("/")}>
-        ← Back
-      </button>
+      <button className={styles.backBtn} onClick={() => router.push("/")}>{t("track.back")}</button>
 
       <div className={styles.card}>
         <div className={styles.icon}>🚤</div>
-        <h1 className={styles.title}>Track Your Order</h1>
-        <p className={styles.subtitle}>
-          Find your delivery status
-        </p>
+        <h1 className={styles.title}>{t("track.title")}</h1>
+        <p className={styles.subtitle}>{t("track.subtitle")}</p>
 
         <div className={styles.toggle}>
           <button
@@ -77,14 +75,14 @@ export default function TrackOrderPage() {
             onClick={() => setTrackBy("phone")}
             type="button"
           >
-            📱 Phone Number
+            {t("track.byPhone")}
           </button>
           <button
             className={`${styles.toggleBtn} ${trackBy === "order" ? styles.toggleActive : ""}`}
             onClick={() => setTrackBy("order")}
             type="button"
           >
-            🔢 Order Number
+            {t("track.byOrder")}
           </button>
         </div>
 
@@ -92,37 +90,37 @@ export default function TrackOrderPage() {
           {trackBy === "phone" ? (
             <div className={styles.inputGroup}>
               <label htmlFor="phone" className={styles.label}>
-                Phone Number
+                {t("track.phoneLabel")}
               </label>
               <input
                 id="phone"
                 type="tel"
                 className={styles.input}
-                placeholder="+34 600 123 456"
+                placeholder={t("track.phonePlaceholder")}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 autoFocus
               />
               <p className={styles.hint}>
-                Enter the phone number you used when placing your order
+                {t("track.phoneHint")}
               </p>
             </div>
           ) : (
             <div className={styles.inputGroup}>
               <label htmlFor="orderNumber" className={styles.label}>
-                Order Number
+                {t("track.orderLabel")}
               </label>
               <input
                 id="orderNumber"
                 type="text"
                 className={styles.input}
-                placeholder="YD-12345"
+                placeholder={t("track.orderPlaceholder")}
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value.toUpperCase())}
                 autoFocus
               />
               <p className={styles.hint}>
-                Your order number starts with YD- followed by 5 digits
+                {t("track.orderHint")}
               </p>
             </div>
           )}
@@ -138,16 +136,16 @@ export default function TrackOrderPage() {
             className={styles.trackBtn}
             disabled={loading}
           >
-            {loading ? "Searching..." : trackBy === "phone" ? "View My Orders" : "Track Order"}
+            {loading ? t("track.searching") : trackBy === "phone" ? t("track.viewMyOrders") : t("track.trackOrder")}
           </button>
         </form>
 
         <div className={styles.help}>
-          <h3>💡 Tip</h3>
+          <h3>{t("track.tipTitle")}</h3>
           <p>
             {trackBy === "phone" 
-              ? "Using your phone number, you can view all your orders in one place."
-              : "You can find your order number in the confirmation screen or email."
+              ? t("track.tipPhone")
+              : t("track.tipOrder")
             }
           </p>
         </div>

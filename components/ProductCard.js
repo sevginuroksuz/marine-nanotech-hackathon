@@ -2,11 +2,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 import styles from "./ProductCard.module.css";
 
 export default function ProductCard({ product, animDelay = 0 }) {
   const router = useRouter();
   const { add, items } = useCart();
+  const { t } = useT();
   const [imgLoaded, setImgLoaded] = useState(false);
   const [flash, setFlash] = useState(false);
   const inCart = items.some((i) => i.id === product.id);
@@ -46,7 +48,7 @@ export default function ProductCard({ product, animDelay = 0 }) {
 
         {isOutOfStock && (
           <div className={styles.outOfStock}>
-            <span className={styles.outOfStockText}>Out of Stock</span>
+            <span className={styles.outOfStockText}>{t("products.outOfStock")}</span>
           </div>
         )}
       </div>
@@ -64,7 +66,7 @@ export default function ProductCard({ product, animDelay = 0 }) {
           <button
             className={`${styles.addBtn} ${flash ? styles.addFlash : ""} ${inCart ? styles.addActive : ""}`}
             onClick={handleAdd}
-            aria-label={`Add ${product.name} to cart`}
+            aria-label={t("products.addToCart", { name: product.name })}
             disabled={isOutOfStock}
           >
             {inCart ? (

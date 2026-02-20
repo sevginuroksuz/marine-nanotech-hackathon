@@ -3,6 +3,8 @@ import { scrapeAllProducts } from "@/lib/scraper";
 import { getCached, setCache, isFresh } from "@/lib/cache";
 import fallback from "@/data/products-fallback.json";
 
+export const dynamic = "force-dynamic";
+
 let revalidating = false;
 async function revalidateInBackground() {
   if (revalidating) return;
@@ -43,7 +45,6 @@ export async function GET(req) {
     const limit    = Math.min(50, parseInt(searchParams.get("limit") || "20"));
     const category = searchParams.get("category") || "All";
     const q        = searchParams.get("q") || "";
-
     let all = [], source = "fallback";
 
     try {
@@ -66,11 +67,11 @@ export async function GET(req) {
 
     const filtered = filter(all, { category, q });
     const start    = (page - 1) * limit;
-    const products = filtered.slice(start, start + limit);
+    const productsSlice = filtered.slice(start, start + limit);
 
     return NextResponse.json(
       { 
-        products, 
+        products: productsSlice, 
         total: filtered.length, 
         page, 
         hasMore: start + limit < filtered.length, 

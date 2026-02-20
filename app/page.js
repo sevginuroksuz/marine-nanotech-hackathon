@@ -1,11 +1,13 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useCart, useToast } from "@/lib/store";
-import Header from "@/components/header";
+import { useT } from "@/lib/i18n";
+import Header from "@/components/HeaderWrapper";
 import ProductGrid from "@/components/ProductGrid";
 import CartDrawer from "@/components/CartDrawer";
 import CheckoutSheet from "@/components/CheckoutSheet";
 import SuccessScreen from "@/components/SuccessScreen";
+import EmergencyMode from "@/components/EmergencyModeWrapper";
 import { ToastContainer } from "@/components/Toast";
 import fallbackData from "@/data/products-fallback.json";
 
@@ -28,6 +30,7 @@ export default function Home() {
   const isFirst   = useRef(true);
   const { count } = useCart();
   const { toasts, remove: removeToast } = useToast();
+  const { t } = useT();
 
   const load = useCallback(async (reset = false) => {
     const p = reset ? 1 : page;
@@ -113,16 +116,28 @@ export default function Home() {
     return () => window.removeEventListener("yachtdrop:opencart", openCart);
   }, []);
 
-  const handleOrder = (orderNum, trackingUrl) => {
+  const handleSearchChange = (text) => {
+    setSearchInput(text);
+  };
+
+  const handleVoiceSearch = (text) => {
+    // Voice search: immediate without debounce
+    setSearchInput(text);
+    setQuery(text);
+    setPage(1);
+  };
+
+  const handleOrder = (order) => {
     setCheckoutOpen(false);
-    setOrderDone({ orderNumber: orderNum, trackingUrl });
+    setOrderDone(order);
   };
 
   return (
     <main style={{ maxWidth: 480, margin: "0 auto", minHeight: "100vh", background: "var(--navy)", position: "relative" }}>
       <Header
         searchInput={searchInput}
-        onSearch={setSearchInput}
+        onSearch={handleSearchChange}
+        onVoiceSearch={handleVoiceSearch}
         categories={CATEGORIES}
         activeCategory={category}
         onCategory={(c) => { setCategory(c); setPage(1); }}
@@ -154,6 +169,7 @@ export default function Home() {
         hasMore={hasMore}
         onRefresh={() => load(true)}
       />
+      <EmergencyMode products={products} />
       {cartOpen && (
         <CartDrawer
           onClose={() => setCartOpen(false)}

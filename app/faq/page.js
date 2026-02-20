@@ -47,37 +47,38 @@ const FAQS = [
 
 export default function FAQPage() {
   const router = useRouter();
+  const translate = (t) => t;
 
   return (
     <main className={styles.container}>
       <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => router.back()} aria-label="Go back">
+        <button className={styles.backBtn} onClick={() => router.back()} aria-label={translate("Go back")}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6"/>
           </svg>
         </button>
-        <h1>❓ FAQs</h1>
-        <p>Frequently Asked Questions</p>
+        <h1>{translate("❓ FAQs")}</h1>
+        <p>{translate("Frequently Asked Questions")}</p>
       </header>
 
       <div className={styles.content}>
         {FAQS.map((faq, i) => (
           <details key={i} className={styles.faqItem}>
             <summary className={styles.faqQuestion}>
-              <span>{faq.q}</span>
+              <span>{translate(faq.q)}</span>
               <svg className={styles.chevron} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="6 9 12 15 18 9"/>
               </svg>
             </summary>
-            <p className={styles.faqAnswer}>{faq.a}</p>
+            <p className={styles.faqAnswer}>{translate(faq.a)}</p>
           </details>
         ))}
 
         <div className={styles.helpBox}>
           <span className={styles.helpIcon}>💬</span>
-          <p>Still have questions?</p>
+          <p>{translate("Still have questions?")}</p>
           <button className={styles.helpBtn} onClick={() => router.push("/contact")}>
-            Contact Support
+            {translate("Contact Support")}
           </button>
         </div>
       </div>

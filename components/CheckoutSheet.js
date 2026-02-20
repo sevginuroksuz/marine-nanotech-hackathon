@@ -1,7 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useCart } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 import styles from "./CheckoutSheet.module.css";
+import dynamic from "next/dynamic";
+
+const MarinaMap = dynamic(() => import("./MarinaMap"), { ssr: false });
 
 const MARINAS = [
   "Port Vell, Barcelona",
@@ -15,6 +19,7 @@ const MARINAS = [
 
 export default function CheckoutSheet({ onClose, onOrder }) {
   const { items, clear } = useCart();
+  const { t } = useT();
   const total = items.reduce((s, i) => s + i.price * i.qty, 0);
   const [mode,   setMode]   = useState("delivery");
   const [marina, setMarina] = useState("");
@@ -24,13 +29,14 @@ export default function CheckoutSheet({ onClose, onOrder }) {
   const [email,  setEmail]  = useState("");
   const [error,  setError]  = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   const handleSubmit = async () => {
-    if (!name.trim()) { setError("Please enter your name."); return; }
-    if (!email.trim() || !email.includes("@")) { setError("Please enter a valid email."); return; }
-    if (mode === "delivery" && !marina.trim()) { setError("Please enter a marina name."); return; }
-    if (mode === "delivery" && !berth.trim())  { setError("Please enter your berth or pontoon."); return; }
-    if (mode === "pickup"   && !marina)        { setError("Please select a pickup marina."); return; }
+    if (!name.trim()) { setError(t("checkout.errors.name")); return; }
+    if (!email.trim() || !email.includes("@")) { setError(t("checkout.errors.email")); return; }
+    if (mode === "delivery" && !marina.trim()) { setError(t("checkout.errors.marina")); return; }
+    if (mode === "delivery" && !berth.trim())  { setError(t("checkout.errors.berth")); return; }
+    if (mode === "pickup"   && !marina)        { setError(t("checkout.errors.pickupMarina")); return; }
     
     setError("");
     setSubmitting(true);
@@ -68,7 +74,7 @@ export default function CheckoutSheet({ onClose, onOrder }) {
 
     } catch (e) {
       console.error("[checkout] error:", e);
-      setError("Something went wrong. Please try again.");
+      setError(t("checkout.errors.generic"));
       setSubmitting(false);
     }
   };
@@ -93,36 +99,56 @@ export default function CheckoutSheet({ onClose, onOrder }) {
                 <button
                   className={`${styles.toggle} ${mode === "delivery" ? styles.toggleActive : ""}`}
                   onClick={() => setMode("delivery")} aria-pressed={mode === "delivery"}
-                >🚤 Delivery to Boat</button>
+                >{t("checkout.deliveryToBoat")}</button>
                 <button
                   className={`${styles.toggle} ${mode === "pickup" ? styles.toggleActive : ""}`}
                   onClick={() => setMode("pickup")} aria-pressed={mode === "pickup"}
-                >📍 Marina Pickup</button>
+                >{t("checkout.marinaPickup")}</button>
               </div>
 
               <div className={styles.fields}>
-                <label className={styles.label}>Your name
-                  <input className={styles.input} value={name} onChange={(e) => setName(e.target.value)} placeholder="Captain's name" />
+                <label className={styles.label}>{t("checkout.yourName")}
+                  <input className={styles.input} value={name} onChange={(e) => setName(e.target.value)} placeholder={t("checkout.namePlaceholder")} />
                 </label>
-                <label className={styles.label}>Email
-                  <input className={styles.input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="captain@example.com" />
+                <label className={styles.label}>{t("checkout.email")}
+                  <input className={styles.input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("checkout.emailPlaceholder")} />
                 </label>
-                <label className={styles.label}>Phone
-                  <input className={styles.input} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+34 600 000 000" />
+                <label className={styles.label}>{t("checkout.phone")}
+                  <input className={styles.input} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("checkout.phonePlaceholder")} />
                 </label>
                 {mode === "delivery" ? (
                   <>
-                    <label className={styles.label}>Marina name
-                      <input className={styles.input} value={marina} onChange={(e) => setMarina(e.target.value)} placeholder="e.g. Port Vell" />
+                    <label className={styles.label}>{t("checkout.marinaName")}
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <input className={styles.input} value={marina} onChange={(e) => setMarina(e.target.value)} placeholder={t("checkout.marinaPlaceholder")} style={{ flex: 1 }} />
+                        <button
+                          type="button"
+                          onClick={() => setShowMap(true)}
+                          style={{
+                            flexShrink: 0,
+                            background: "rgba(34, 211, 238, 0.08)",
+                            border: "1px solid rgba(34, 211, 238, 0.18)",
+                            color: "var(--cyan)",
+                            borderRadius: "12px",
+                            padding: "8px 12px",
+                            fontSize: "0.85rem",
+                            cursor: "pointer",
+                            transition: "background 0.15s",
+                          }}
+                          aria-label="Open marina map"
+                        >
+                          🗺️
+                        </button>
+                      </div>
                     </label>
-                    <label className={styles.label}>Berth / Pontoon
-                      <input className={styles.input} value={berth} onChange={(e) => setBerth(e.target.value)} placeholder="e.g. Pontoon B, Berth 12" />
+                    <label className={styles.label}>{t("checkout.berthPontoon")}
+                      <input className={styles.input} value={berth} onChange={(e) => setBerth(e.target.value)} placeholder={t("checkout.berthPlaceholder")} />
                     </label>
                   </>
                 ) : (
-                  <label className={styles.label}>Pickup location
+                  <label className={styles.label}>{t("checkout.pickupLocation")}
                     <select className={styles.select} value={marina} onChange={(e) => setMarina(e.target.value)}>
-                      <option value="">Select marina…</option>
+                      <option value="">{t("checkout.selectMarina")}</option>
                       {MARINAS.map((m) => <option key={m} value={m}>{m}</option>)}
                     </select>
                   </label>
@@ -137,7 +163,7 @@ export default function CheckoutSheet({ onClose, onOrder }) {
                   </div>
                 ))}
                 <div className={styles.summaryTotal}>
-                  <span>Total</span>
+                  <span>{t("cart.total")}</span>
                   <span className={styles.totalAmt}>€{total.toFixed(2)}</span>
                 </div>
               </div>
@@ -148,9 +174,15 @@ export default function CheckoutSheet({ onClose, onOrder }) {
                 onClick={handleSubmit}
                 disabled={submitting}
               >
-                {submitting ? "Processing..." : "🛒 Place Order"}
+                {submitting ? t("checkout.processing") : t("checkout.placeOrder")}
               </button>
         </div>
+        {showMap && (
+          <MarinaMap
+            onSelectMarina={(name) => { setMarina(name); setShowMap(false); }}
+            onClose={() => setShowMap(false)}
+          />
+        )}
       </div>
     </>
   );

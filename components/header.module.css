@@ -78,9 +78,15 @@
   border: 2px solid var(--navy);
   line-height: 1;
 }
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
 .searchWrap {
   position: relative;
-  margin-bottom: 10px;
+  flex: 1;
 }
 .searchIcon {
   position: absolute;

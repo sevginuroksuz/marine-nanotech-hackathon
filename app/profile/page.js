@@ -3,6 +3,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
+const QUICK_ACTIONS = [
+  { icon: "📦", title: "Track Orders", subtitle: "Find your shipments", href: "/track" },
+  { icon: "📋", title: "My Orders", subtitle: "Order history & status", href: "/my-orders" },
+  { icon: "🛍️", title: "Continue Shopping", subtitle: "Browse products", href: "/" },
+];
+
+const HELP_LINKS = [
+  { icon: "❓", label: "FAQs", href: "/faq" },
+  { icon: "📧", label: "Contact Support", href: "/contact" },
+  { icon: "📋", label: "Terms & Privacy", href: "/terms" },
+];
+
 export default function ProfilePage() {
   const router = useRouter();
   const [installPrompt, setInstallPrompt] = useState(null);
@@ -11,6 +23,7 @@ export default function ProfilePage() {
     version: "0.1.0",
     buildDate: "2026-02-19",
   });
+  const translate = (t) => t;
 
   useEffect(() => {
     // Check if app is already installed
@@ -42,8 +55,8 @@ export default function ProfilePage() {
   return (
     <main className={styles.container}>
       <header className={styles.header}>
-        <h1>⚓ Profile</h1>
-        <p>Your Yachtdrop Account</p>
+        <h1>{translate("⚓ Profile")}</h1>
+        <p>{translate("Your Yachtdrop Account")}</p>
       </header>
 
       <div className={styles.content}>
@@ -52,13 +65,13 @@ export default function ProfilePage() {
           <section className={styles.card}>
             <div className={styles.cardHeader}>
               <span className={styles.icon}>📱</span>
-              <h2>Install App</h2>
+              <h2>{translate("Install App")}</h2>
             </div>
             <p className={styles.cardDescription}>
-              Install Yachtdrop on your device for instant access without opening a browser.
+              {translate("Install Yachtdrop on your device for instant access without opening a browser.")}
             </p>
             <button className={styles.primaryBtn} onClick={handleInstallApp}>
-              Install Now
+              {translate("Install Now")}
             </button>
           </section>
         )}
@@ -67,85 +80,62 @@ export default function ProfilePage() {
           <section className={styles.card}>
             <div className={styles.cardContent}>
               <span className={styles.icon}>✅</span>
-              <h3>App Installed</h3>
-              <p className={styles.smallText}>You're using Yachtdrop as an app!</p>
+              <h3>{translate("App Installed")}</h3>
+              <p className={styles.smallText}>{translate("You're using Yachtdrop as an app!")}</p>
             </div>
           </section>
         )}
 
         {/* Quick Actions */}
         <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>Quick Actions</h2>
-          <button 
-            className={styles.actionBtn}
-            onClick={() => router.push("/track")}
-          >
-            <span>📦</span>
-            <div className={styles.actionContent}>
-              <div className={styles.actionTitle}>Track Orders</div>
-              <div className={styles.actionSubtitle}>Find your shipments</div>
-            </div>
-            <span className={styles.arrow}>→</span>
-          </button>
-          <button 
-            className={styles.actionBtn}
-            onClick={() => router.push("/my-orders")}
-          >
-            <span>📋</span>
-            <div className={styles.actionContent}>
-              <div className={styles.actionTitle}>My Orders</div>
-              <div className={styles.actionSubtitle}>Order history & status</div>
-            </div>
-            <span className={styles.arrow}>→</span>
-          </button>
-          <button 
-            className={styles.actionBtn}
-            onClick={() => router.push("/")}
-          >
-            <span>🛍️</span>
-            <div className={styles.actionContent}>
-              <div className={styles.actionTitle}>Continue Shopping</div>
-              <div className={styles.actionSubtitle}>Browse products</div>
-            </div>
-            <span className={styles.arrow}>→</span>
-          </button>
+          <h2 className={styles.sectionTitle}>{translate("Quick Actions")}</h2>
+          {QUICK_ACTIONS.map((action) => (
+            <button
+              key={action.title}
+              className={styles.actionBtn}
+              onClick={() => router.push(action.href)}
+            >
+              <span>{action.icon}</span>
+              <div className={styles.actionContent}>
+                <div className={styles.actionTitle}>{translate(action.title)}</div>
+                <div className={styles.actionSubtitle}>{translate(action.subtitle)}</div>
+              </div>
+              <span className={styles.arrow}>→</span>
+            </button>
+          ))}
         </section>
 
         {/* Information Section */}
         <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>About</h2>
+          <h2 className={styles.sectionTitle}>{translate("About")}</h2>
           <div className={styles.infoRow}>
-            <span>App Name</span>
+            <span>{translate("App Name")}</span>
             <span className={styles.infoValue}>Yachtdrop</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Version</span>
+            <span>{translate("Version")}</span>
             <span className={styles.infoValue}>{appInfo.version}</span>
           </div>
           <div className={styles.infoRow}>
-            <span>Build Date</span>
+            <span>{translate("Build Date")}</span>
             <span className={styles.infoValue}>{appInfo.buildDate}</span>
           </div>
         </section>
 
         {/* Help & Support */}
         <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>Help & Support</h2>
-          <button className={styles.linkBtn} onClick={() => router.push("/faq")}>
-            <span>❓</span> FAQs
-          </button>
-          <button className={styles.linkBtn} onClick={() => router.push("/contact")}>
-            <span>📧</span> Contact Support
-          </button>
-          <button className={styles.linkBtn} onClick={() => router.push("/terms")}>
-            <span>📋</span> Terms & Privacy
-          </button>
+          <h2 className={styles.sectionTitle}>{translate("Help & Support")}</h2>
+          {HELP_LINKS.map((link) => (
+            <button key={link.href} className={styles.linkBtn} onClick={() => router.push(link.href)}>
+              <span>{link.icon}</span> {translate(link.label)}
+            </button>
+          ))}
         </section>
 
         {/* Footer Info */}
         <div className={styles.footer}>
-          <p>Made for sailors, by sailing enthusiasts 🌊</p>
-          <p className={styles.smallText}>Optimized for mobile • Offline-capable • Ultra-fast</p>
+          <p>{translate("Made for sailors, by sailing enthusiasts 🌊")}</p>
+          <p className={styles.smallText}>{translate("Optimized for mobile • Offline-capable • Ultra-fast")}</p>
         </div>
       </div>
     </main>

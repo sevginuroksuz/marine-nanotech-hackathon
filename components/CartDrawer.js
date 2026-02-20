@@ -1,25 +1,27 @@
 "use client";
 import { useCart } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 import styles from "./CartDrawer.module.css";
 import SwipeableCartItem from "./SwipeableCartItem";
 
 export default function CartDrawer({ onClose, onCheckout }) {
   const { items, remove, updateQty } = useCart();
+  const { t } = useT();
   const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
   return (
     <>
       <div className={styles.backdrop} onClick={onClose} aria-hidden="true" />
-      <div className={styles.drawer} role="dialog" aria-label="Shopping cart" aria-modal="true">
+      <div className={styles.drawer} role="dialog" aria-label={t("cart.title")} aria-modal="true">
         <div className={styles.handle} />
         <div className={styles.topRow}>
-          <h2 className={styles.title}>Cart</h2>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close cart">✕</button>
+          <h2 className={styles.title}>{t("cart.title")}</h2>
+          <button className={styles.closeBtn} onClick={onClose} aria-label={t("cart.close")}>✕</button>
         </div>
         {items.length === 0 ? (
           <div className={styles.empty}>
             <span className={styles.emptyIcon}>⚓</span>
-            <p>Your cart is empty</p>
+            <p>{t("cart.empty")}</p>
           </div>
         ) : (
           <>
@@ -49,10 +51,10 @@ export default function CartDrawer({ onClose, onCheckout }) {
             </ul>
             <div className={styles.footer}>
               <div className={styles.totalRow}>
-                <span className={styles.totalLabel}>Total</span>
+                <span className={styles.totalLabel}>{t("cart.total")}</span>
                 <span className={styles.totalAmt}>€{total.toFixed(2)}</span>
               </div>
-              <button className={styles.checkoutBtn} onClick={onCheckout}>Checkout →</button>
+              <button className={styles.checkoutBtn} onClick={onCheckout}>{t("cart.checkout")}</button>
             </div>
           </>
         )}

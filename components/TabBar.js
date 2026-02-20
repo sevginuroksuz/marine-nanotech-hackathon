@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import styles from "./TabBar.module.css";
 import { useCart } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 const BrowseIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -25,15 +26,18 @@ const CartIcon = () => (
   </svg>
 );
 
+const TAB_KEYS = ["browse", "cart", "orders"];
+
 const TABS = [
-  { id: "browse", label: "Browse", Icon: BrowseIcon, path: "/" },
-  { id: "cart", label: "Cart", Icon: CartIcon, path: null },
-  { id: "orders", label: "Orders", Icon: OrdersIcon, path: "/track" },
+  { id: "browse", labelKey: "nav.browse", Icon: BrowseIcon, path: "/" },
+  { id: "cart", labelKey: "nav.cart", Icon: CartIcon, path: null },
+  { id: "orders", labelKey: "nav.orders", Icon: OrdersIcon, path: "/track" },
 ];
 
 export default function TabBar() {
   const pathname = usePathname();
   const { count } = useCart();
+  const { t } = useT();
 
   return (
     <nav className={styles.tabBar} role="navigation" aria-label="Main navigation">
@@ -54,7 +58,7 @@ export default function TabBar() {
                 <tab.Icon />
                 {badge > 0 && <span className={styles.tabBadge}>{badge}</span>}
               </div>
-              <span className={styles.tabLabel}>{tab.label}</span>
+              <span className={styles.tabLabel}>{t(tab.labelKey)}</span>
             </button>
           );
         }
@@ -69,7 +73,7 @@ export default function TabBar() {
             <div className={styles.tabIcon}>
               <tab.Icon />
             </div>
-            <span className={styles.tabLabel}>{tab.label}</span>
+            <span className={styles.tabLabel}>{t(tab.labelKey)}</span>
           </Link>
         );
       })}

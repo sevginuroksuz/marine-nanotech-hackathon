@@ -42,12 +42,12 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    // Generate a description if none exists
-    if (!product.shortDescription) {
-      product.description = generateDescription(product);
+    const payload = { ...product };
+    if (!payload.shortDescription) {
+      payload.description = generateDescription(payload);
     }
 
-    return NextResponse.json({ product });
+    return NextResponse.json({ product: payload });
   } catch (e) {
     console.error("[GET /api/products/id]", e);
     return NextResponse.json({ error: "Failed to fetch product" }, { status: 500 });

@@ -2,12 +2,14 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useCart } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 import styles from "./page.module.css";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { add, items } = useCart();
+  const { lang } = useT();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,7 +26,7 @@ export default function ProductDetailPage() {
           return;
         }
 
-        const res = await fetch(`/api/products/${productId}`);
+        const res = await fetch(`/api/products/${productId}?lang=${lang}`);
         const data = await res.json();
 
         if (res.ok) {
@@ -41,7 +43,7 @@ export default function ProductDetailPage() {
     }
 
     fetchProduct();
-  }, [params, router]);
+  }, [params, router, lang]);
 
   const handleAddToCart = () => {
     if (!product) return;

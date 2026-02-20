@@ -15,7 +15,9 @@
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
     "zustand": "^4.5.2",
-    "@upstash/redis": "^1.31.3"
+    "@upstash/redis": "^1.31.3",
+    "leaflet": "^1.9.4",
+    "@vitalets/google-translate-api": "^8.0.0"
   },
   "devDependencies": {
     "eslint": "^8",

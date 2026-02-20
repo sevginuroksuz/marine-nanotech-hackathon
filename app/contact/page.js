@@ -64,23 +64,24 @@ const SOCIALS = [
 
 export default function ContactPage() {
   const router = useRouter();
+  const translate = (t) => t;
 
   return (
     <main className={styles.container}>
       <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => router.back()} aria-label="Go back">
+        <button className={styles.backBtn} onClick={() => router.back()} aria-label={translate("Go back")}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6"/>
           </svg>
         </button>
-        <h1>📧 Contact</h1>
-        <p>Get in touch with Yachtdrop</p>
+        <h1>{translate("📧 Contact")}</h1>
+        <p>{translate("Get in touch with Yachtdrop")}</p>
       </header>
 
       <div className={styles.content}>
         {/* Contact Methods */}
         <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>Reach Us</h2>
+          <h2 className={styles.sectionTitle}>{translate("Reach Us")}</h2>
           {CONTACT_METHODS.map((method) => (
             <a
               key={method.label}
@@ -91,7 +92,7 @@ export default function ContactPage() {
             >
               <span className={styles.contactIcon}>{method.icon}</span>
               <div className={styles.contactInfo}>
-                <div className={styles.contactLabel}>{method.label}</div>
+                <div className={styles.contactLabel}>{translate(method.label)}</div>
                 <div className={styles.contactValue}>{method.value}</div>
               </div>
               <span className={styles.arrow}>→</span>
@@ -101,7 +102,7 @@ export default function ContactPage() {
 
         {/* Social Media */}
         <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>Follow Us</h2>
+          <h2 className={styles.sectionTitle}>{translate("Follow Us")}</h2>
           <div className={styles.socialGrid}>
             {SOCIALS.map((social) => (
               <a
@@ -112,7 +113,7 @@ export default function ContactPage() {
                 rel="noopener noreferrer"
               >
                 <span className={styles.socialIcon}>{social.svg}</span>
-                <span className={styles.socialLabel}>{social.label}</span>
+                <span className={styles.socialLabel}>{translate(social.label)}</span>
               </a>
             ))}
           </div>
@@ -120,25 +121,25 @@ export default function ContactPage() {
 
         {/* Office Hours */}
         <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>Office Hours</h2>
+          <h2 className={styles.sectionTitle}>{translate("Office Hours")}</h2>
           <div className={styles.hoursRow}>
-            <span>Monday – Friday</span>
+            <span>{translate("Monday – Friday")}</span>
             <span className={styles.hoursValue}>09:00 – 18:00 CET</span>
           </div>
           <div className={styles.hoursRow}>
-            <span>Saturday</span>
+            <span>{translate("Saturday")}</span>
             <span className={styles.hoursValue}>10:00 – 14:00 CET</span>
           </div>
           <div className={styles.hoursRow}>
-            <span>Sunday</span>
-            <span className={styles.hoursValue}>Closed</span>
+            <span>{translate("Sunday")}</span>
+            <span className={styles.hoursValue}>{translate("Closed")}</span>
           </div>
         </section>
 
         {/* Quick Note */}
         <div className={styles.note}>
           <span>⚓</span>
-          <p>Based in Mallorca, serving yachts across the Mediterranean.</p>
+          <p>{translate("Based in Mallorca, serving yachts across the Mediterranean.")}</p>
         </div>
       </div>
     </main>
