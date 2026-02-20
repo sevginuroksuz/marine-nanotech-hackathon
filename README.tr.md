@@ -2,7 +2,7 @@
 
 #  Yachtdrop  Denizcilik Teslimat Platformu
 
-** Canlı Demo: [https://yachtdrop-zeta.vercel.app](https://yachtdrop-zeta.vercel.app)**
+** Canlı Demo: [https://yachtdrop-sevgi-nur-oksuzs-projects.vercel.app](https://yachtdrop-sevgi-nur-oksuzs-projects.vercel.app)**
 
 > Marine Nanotech Hackathon 2025 Projesi
 
@@ -89,3 +89,4 @@ yachtdrop/
 <div align="center">
 <i>Marine Nanotech Hackathon 2025 için  ile yapıldı</i>
 </div>
+

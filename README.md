@@ -2,7 +2,7 @@
 
 #  Yachtdrop  Marine Delivery Platform
 
-** Live Demo: [https://yachtdrop-zeta.vercel.app](https://yachtdrop-zeta.vercel.app)**
+** Live Demo: [https://yachtdrop-sevgi-nur-oksuzs-projects.vercel.app](https://yachtdrop-sevgi-nur-oksuzs-projects.vercel.app)**
 
 > Marine Nanotech Hackathon 2025 Submission
 
@@ -89,3 +89,4 @@ yachtdrop/
 <div align="center">
 <i>Built with  for Marine Nanotech Hackathon 2025</i>
 </div>
+
