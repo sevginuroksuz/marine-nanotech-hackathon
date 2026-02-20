@@ -127,9 +127,9 @@ export default function Home() {
     setPage(1);
   };
 
-  const handleOrder = (order) => {
+  const handleOrder = (orderNumber, trackingUrl) => {
     setCheckoutOpen(false);
-    setOrderDone(order);
+    setOrderDone({ orderNumber, trackingUrl });
   };
 
   return (
